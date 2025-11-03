@@ -23,19 +23,30 @@ def generate_launch_description():
                 'launch',
                 'gemini_330_series.launch.py'
             ])
-        ])
+        ]),
+        launch_arguments={
+            'enable_point_cloud': 'true',
+            'enable_colored_point_cloud': 'true',
+            'enable_depth': 'true',
+            'enable_color': 'true',
+        }.items()
     )
 
-    recording_dir_script = ExecuteProcess(
-        cmd=['bash', '-c', 'mkdir -p /tmp/recordingns'],
-        output='screen'
-    )
-
+    # Record only the essential topics
     rosbag_recorder = ExecuteProcess(
         cmd=[
             'ros2', 'bag', 'record',
-            '--all',
+            '/camera/color/image_raw',
+            '/camera/depth/image_raw',
+            '/camera/depth/points',
+            '/camera/color/camera_info',
+            '/camera/depth/camera_info',
+            '/tf',
+            '/tf_static',
             '--storage', 'mcap',
+            '--storage', 'mcap',
+            '--compression-mode', 'file',
+            '--compression-format', 'zstd',
             '--output', recording_path
         ],
         output='screen',
@@ -45,7 +56,5 @@ def generate_launch_description():
     return LaunchDescription([
         recording_path_arg,
         orbbec_camera_launch,
-        recording_dir_script,
         rosbag_recorder,
     ])
-

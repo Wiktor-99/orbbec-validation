@@ -18,6 +18,8 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-camera-info-manager \
     ros-jazzy-diagnostic-updater \
     ros-jazzy-diagnostic-msgs \
+    ros-jazzy-cyclonedds \
+    ros-jazzy-rmw-cyclonedds-cpp \
     ros-jazzy-statistics-msgs \
     ros-jazzy-backward-ros \
     libdw-dev \

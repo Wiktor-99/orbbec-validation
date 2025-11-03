@@ -11,10 +11,15 @@ services:
     devices:
       - "/dev:/dev"
     volumes:
-      - /tmp/recordingns:/tmp/recordingns
+      - /tmp/recordings:/tmp/recordings
     environment:
       - ROS_DOMAIN_ID=0
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-    command: ["ros2", "launch", "orbbec_validation_launch", "orbbec_validation.launch.py"]
+      - ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
+    command: >
+      bash -c "ros2 launch orbbec_validation_launch orbbec_validation.launch.py recording_path:=/tmp/recordings/run_$(date +%Y%m%d_%H%M%S)"
     restart: unless-stopped
-
+    ulimits:
+      nofile:
+        soft: 1024
+        hard: 2048
