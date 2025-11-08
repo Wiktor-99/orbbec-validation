@@ -12,10 +12,15 @@ services:
       - "/dev:/dev"
     volumes:
       - /tmp/recordings:/tmp/recordings
+      - ./cyclonedds.xml:/var/tmp/cyclonedds.xml
     environment:
       - ROS_DOMAIN_ID=0
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
       - ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
+      - CYCLONEDDS_URI=file:///var/tmp/cyclonedds.xml
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    runtime: nvidia
     command: >
       bash -c "ros2 launch orbbec_validation_launch orbbec_validation.launch.py recording_path:=/tmp/recordings/run_$(date +%Y%m%d_%H%M%S)"
     restart: unless-stopped
